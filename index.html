@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="提词器">
+  <meta name="theme-color" content="#000000">
+  <title>提词器 - Teleprompter</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- ===== 编辑模式 ===== -->
+    <div id="editor-view" class="view active">
+      <header class="editor-header">
+        <h1 class="logo">提词器</h1>
+        <div class="header-actions">
+          <button id="btn-saved-scripts" class="icon-btn" title="已保存的稿件">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="editor-body">
+        <textarea id="script-input" placeholder="在此输入或粘贴您的提词内容...&#10;&#10;支持多段落，播放时会自动平滑滚动。"></textarea>
+      </div>
+
+      <div class="settings-panel">
+        <div class="setting-group">
+          <label>字号</label>
+          <div class="setting-control">
+            <button class="adj-btn" data-target="fontSize" data-delta="-4">−</button>
+            <span id="fontSize-display" class="setting-value">48</span>
+            <button class="adj-btn" data-target="fontSize" data-delta="4">+</button>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>速度</label>
+          <div class="setting-control">
+            <button class="adj-btn" data-target="speed" data-delta="-10">−</button>
+            <span id="speed-display" class="setting-value">50</span>
+            <button class="adj-btn" data-target="speed" data-delta="10">+</button>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>行距</label>
+          <div class="setting-control">
+            <button class="adj-btn" data-target="lineHeight" data-delta="-0.1">−</button>
+            <span id="lineHeight-display" class="setting-value">1.8</span>
+            <button class="adj-btn" data-target="lineHeight" data-delta="0.1">+</button>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>颜色</label>
+          <div class="color-options">
+            <button class="color-btn active" data-color="#FFFFFF" style="background:#FFFFFF"></button>
+            <button class="color-btn" data-color="#00FF00" style="background:#00FF00"></button>
+            <button class="color-btn" data-color="#FFD700" style="background:#FFD700"></button>
+            <button class="color-btn" data-color="#00BFFF" style="background:#00BFFF"></button>
+          </div>
+        </div>
+        <div class="setting-group">
+          <label>镜像</label>
+          <div class="setting-control">
+            <button id="btn-mirror" class="toggle-btn">关</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="editor-footer">
+        <button id="btn-play" class="play-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+          开始播放
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== 播放模式 ===== -->
+    <div id="player-view" class="view">
+      <div id="countdown-overlay" class="countdown-overlay hidden">
+        <span id="countdown-number">3</span>
+      </div>
+
+      <div id="scroll-container" class="scroll-container">
+        <div id="scroll-spacer-top" class="scroll-spacer"></div>
+        <div id="scroll-text"></div>
+        <div id="scroll-spacer-bottom" class="scroll-spacer"></div>
+      </div>
+
+      <div id="guide-line" class="guide-line"></div>
+
+      <div id="progress-bar" class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+
+      <div id="player-controls" class="player-controls">
+        <button id="btn-stop" class="ctrl-btn" title="返回编辑">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <button id="btn-slower" class="ctrl-btn" title="减速">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 15l-7-7-7 7"/></svg>
+        </button>
+        <button id="btn-pause" class="ctrl-btn ctrl-btn-primary" title="暂停/继续">
+          <svg id="icon-pause" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          <svg id="icon-resume" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="hidden"><polygon points="5,3 19,12 5,21"/></svg>
+        </button>
+        <button id="btn-faster" class="ctrl-btn" title="加速">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l7 7 7-7"/></svg>
+        </button>
+        <button id="btn-reset" class="ctrl-btn" title="重置到开头">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+        </button>
+      </div>
+
+      <div id="speed-indicator" class="speed-indicator hidden">
+        <span id="speed-indicator-text"></span>
+      </div>
+    </div>
+
+    <!-- ===== 稿件列表弹窗 ===== -->
+    <div id="scripts-modal" class="modal hidden">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>已保存的稿件</h2>
+          <button id="btn-close-modal" class="icon-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div id="scripts-list" class="scripts-list">
+          <p class="empty-hint">暂无保存的稿件</p>
+        </div>
+        <div class="modal-footer">
+          <button id="btn-save-script" class="save-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            保存当前稿件
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
