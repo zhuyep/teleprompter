@@ -1,0 +1,39 @@
+name: Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: node --check app.js
+      - name: Validate manifest and required assets
+        run: |
+          python3 -m json.tool manifest.json >/dev/null
+          python3 - <<'PY'
+          from pathlib import Path
+
+          required = [
+              "index.html",
+              "style.css",
+              "app.js",
+              "manifest.json",
+              "sw.js",
+              "icons/icon-192.png",
+              "icons/icon-512.png",
+          ]
+          missing = [path for path in required if not Path(path).is_file()]
+          if missing:
+              raise SystemExit(f"Missing required assets: {', '.join(missing)}")
+          PY
