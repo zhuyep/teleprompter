@@ -19,6 +19,10 @@
       <header class="editor-header">
         <h1 class="logo">提词器</h1>
         <div class="header-actions">
+          <nav class="project-links" aria-label="项目链接">
+            <a href="https://github.com/zhuyep/teleprompter" target="_blank" rel="noopener noreferrer" aria-label="GitHub 源码（新标签页）">GitHub</a>
+            <a href="https://github.com/zhuyep/teleprompter/issues" target="_blank" rel="noopener noreferrer" aria-label="反馈（GitHub 公开问题，新标签页）">反馈</a>
+          </nav>
           <button id="btn-saved-scripts" class="icon-btn" title="已保存的稿件">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
           </button>
@@ -57,10 +61,10 @@
         <div class="setting-group">
           <label>颜色</label>
           <div class="color-options">
-            <button class="color-btn active" data-color="#FFFFFF" style="background:#FFFFFF"></button>
-            <button class="color-btn" data-color="#00FF00" style="background:#00FF00"></button>
-            <button class="color-btn" data-color="#FFD700" style="background:#FFD700"></button>
-            <button class="color-btn" data-color="#00BFFF" style="background:#00BFFF"></button>
+            <button class="color-btn active" data-color="#FFFFFF" style="background:#FFFFFF" aria-label="文字颜色：白色" aria-pressed="true"></button>
+            <button class="color-btn" data-color="#00FF00" style="background:#00FF00" aria-label="文字颜色：绿色" aria-pressed="false"></button>
+            <button class="color-btn" data-color="#FFD700" style="background:#FFD700" aria-label="文字颜色：金色" aria-pressed="false"></button>
+            <button class="color-btn" data-color="#00BFFF" style="background:#00BFFF" aria-label="文字颜色：蓝色" aria-pressed="false"></button>
           </div>
         </div>
         <div class="setting-group">

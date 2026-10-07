@@ -16,6 +16,10 @@ A privacy-first, installable browser teleprompter for talks, recording, teaching
 - Installable PWA with offline support / 支持安装到桌面和离线使用
 - No analytics and no server-side storage / 无统计脚本、无服务端存储
 
+The editor header links to the GitHub source and public issue list in a new tab, so your draft stays open. Do not include private script content in feedback. Color buttons expose their names and selected state to assistive technology.
+
+编辑页顶部可在新标签页打开 GitHub 源码和公开反馈列表，当前稿件仍保留在编辑页。反馈请勿包含私人稿件内容；颜色按钮向辅助技术提供颜色名称和选中状态。
+
 ## Quick start / 快速开始
 
 1. Open the [online app](https://zhuyep.github.io/teleprompter/). / 打开[在线应用](https://zhuyep.github.io/teleprompter/)。
@@ -61,4 +65,3 @@ Bug reports and focused pull requests are welcome. Please read [CONTRIBUTING.md]
 ## License / 许可证
 
 [MIT](LICENSE) © Zhuy
-

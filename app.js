@@ -110,7 +110,9 @@
     lineHeightDisplay.textContent = state.lineHeight.toFixed(1);
 
     document.querySelectorAll('.color-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.color === state.textColor);
+      const selected = btn.dataset.color === state.textColor;
+      btn.classList.toggle('active', selected);
+      btn.setAttribute('aria-pressed', String(selected));
     });
 
     btnMirror.textContent = state.mirror ? '开' : '关';
