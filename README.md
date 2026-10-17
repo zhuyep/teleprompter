@@ -34,7 +34,7 @@ The editor header links to the GitHub source and public issue list in a new tab,
 | <kbd>Space</kbd> | Pause or resume / 暂停或继续 |
 | <kbd>↑</kbd> / <kbd>↓</kbd> | Slower or faster / 减速或加速 |
 | <kbd>R</kbd> | Return to the beginning / 回到开头 |
-| <kbd>Esc</kbd> | Exit playback / 退出播放 |
+| <kbd>Esc</kbd> | Exit playback or cancel countdown / 退出播放或取消倒计时 |
 
 ## Privacy / 隐私
 
@@ -55,6 +55,14 @@ python3 -m http.server 8000
 Then open `http://localhost:8000`. A local web server is recommended because service workers are not available when opening `index.html` directly from the filesystem.
 
 然后访问 `http://localhost:8000`。建议通过本地服务器运行，因为直接双击打开 `index.html` 时无法正常启用 Service Worker。
+
+Run the playback regression tests with Node.js 22 or later:
+
+使用 Node.js 22 或更新版本运行播放回归测试：
+
+```bash
+node --test tests/*.test.cjs
+```
 
 ## Contributing / 参与贡献
 
