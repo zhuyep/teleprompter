@@ -1,4 +1,4 @@
-const CACHE_NAME = 'teleprompter-v2';
+const CACHE_NAME = 'teleprompter-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -19,7 +19,12 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+      Promise.all(
+        keys
+          // Match the entire versioned key, including rejecting a trailing newline.
+          .filter((k) => k !== CACHE_NAME && /^teleprompter-v[0-9]+(?![\s\S])/.test(k))
+          .map((k) => caches.delete(k))
+      )
     )
   );
   self.clients.claim();

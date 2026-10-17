@@ -18,6 +18,10 @@ jobs:
           node-version: 22
       - name: Check JavaScript syntax
         run: node --check app.js
+      - name: Check service worker syntax
+        run: node --check sw.js
+      - name: Run regression tests
+        run: node --test tests/*.test.cjs
       - name: Validate manifest and required assets
         run: |
           python3 -m json.tool manifest.json >/dev/null

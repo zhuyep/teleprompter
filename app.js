@@ -61,6 +61,7 @@
 
   // ===== Animation State =====
   let animationId = null;
+  let countdownInterval = null;
   let lastTimestamp = null;
   let controlsTimeout = null;
   let speedIndicatorTimeout = null;
@@ -170,18 +171,26 @@
     return scrollText.scrollHeight;
   }
 
+  function cancelCountdown() {
+    if (countdownInterval !== null) {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
+    }
+    countdownOverlay.classList.add('hidden');
+  }
+
   function startCountdown(callback) {
+    cancelCountdown();
     countdownOverlay.classList.remove('hidden');
     let count = 3;
     countdownNumber.textContent = count;
 
-    const interval = setInterval(() => {
+    countdownInterval = setInterval(() => {
       count--;
       if (count > 0) {
         countdownNumber.textContent = count;
       } else {
-        clearInterval(interval);
-        countdownOverlay.classList.add('hidden');
+        cancelCountdown();
         callback();
       }
     }, 1000);
@@ -259,6 +268,7 @@
   }
 
   function stopPlaying() {
+    cancelCountdown();
     state.playing = false;
     state.paused = false;
     if (animationId) {
